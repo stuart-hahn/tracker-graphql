@@ -37,13 +37,22 @@ const Query = {
             }
         }
 
-        console.log(info)
-
         return prisma.query.tournaments(opArgs, info)
     },
-    matches(parent, args, { prisma, request }, info) {
+    matches(parent, args, { prisma }, info) {
         const opArgs = {}
         return prisma.query.matches(opArgs, info)
+    },
+    players(parent, args, { prisma }, info) {
+        const opArgs = {}
+
+        if (args.query) {
+            opArgs.where = {
+                name_contains: args.query
+            }
+        }
+
+        return prisma.query.players(opArgs, info)
     }
 }
 

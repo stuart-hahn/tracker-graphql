@@ -11,7 +11,7 @@ type Query {
   me: User!
   tournaments: [Tournament!]!
   matches: [Match!]!
-  players: [Player!]!
+  players(query: String): [Player!]!
 }
 
 type Mutation {
