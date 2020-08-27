@@ -78,6 +78,30 @@ const Mutation = {
         }, info)
 
         return tournament
+    },
+    async createMatch(parent, args, { prisma, request }, info) {
+        const userId = getUserId(request)
+
+        const tournamentExists = await prisma.exists.Tournament({
+            id: args.data.tournament,
+            creator: {
+                id: userId
+            }
+        })
+
+        if (!tournamentExists) {
+            throw new Error("Tournament not found or you aren't the tournament creator")
+        }
+
+        return prisma.mutation.createMatch({
+            data: {
+                tournament: {
+                    connect: {
+                        id: args.data.tournament
+                    }
+                }
+            }
+        }, info)
     }
 }
 

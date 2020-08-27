@@ -10,6 +10,8 @@ type Query {
   ): [User!]!
   me: User!
   tournaments: [Tournament!]!
+  matches: [Match!]!
+  players: [Player!]!
 }
 
 type Mutation {
@@ -18,6 +20,7 @@ type Mutation {
   deleteUser: User!
   updateUser(data: UpdateUserInput!): User!
   createTournament(data: CreateTournamentInput!): Tournament!
+  createMatch(data: CreateMatchInput!): Match!
 }
 
 # type Subscription {
@@ -48,6 +51,10 @@ input UpdateUserInput {
 
 input CreateTournamentInput {
   name: String!
+}
+
+input CreateMatchInput {
+  tournament: ID!
 }
 
 type User {

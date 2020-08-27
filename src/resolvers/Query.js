@@ -37,7 +37,13 @@ const Query = {
             }
         }
 
+        console.log(info)
+
         return prisma.query.tournaments(opArgs, info)
+    },
+    matches(parent, args, { prisma, request }, info) {
+        const opArgs = {}
+        return prisma.query.matches(opArgs, info)
     }
 }
 
