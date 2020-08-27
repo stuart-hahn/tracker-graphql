@@ -2,7 +2,14 @@ type User {
   id: ID! @id
   name: String!
   email: String! @unique
+  tournaments: [Tournament!]!
   password: String!
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
+}
+
+type Tournament {
+  id: ID! @id
+  name: String! @unique
+  creator: User! @relation(link: INLINE)
 }

@@ -1,5 +1,9 @@
 # source: http://localhost:4466/tracker/dev
-# timestamp: Thu Aug 27 2020 11:40:19 GMT-0400 (Eastern Daylight Time)
+# timestamp: Thu Aug 27 2020 14:28:25 GMT-0400 (Eastern Daylight Time)
+
+type AggregateTournament {
+  count: Int!
+}
 
 type AggregateUser {
   count: Int!
@@ -23,11 +27,17 @@ scalar Long
 
 type Mutation {
   createUser(data: UserCreateInput!): User!
+  createTournament(data: TournamentCreateInput!): Tournament!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  updateTournament(data: TournamentUpdateInput!, where: TournamentWhereUniqueInput!): Tournament
   deleteUser(where: UserWhereUniqueInput!): User
+  deleteTournament(where: TournamentWhereUniqueInput!): Tournament
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  upsertTournament(where: TournamentWhereUniqueInput!, create: TournamentCreateInput!, update: TournamentUpdateInput!): Tournament!
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
+  updateManyTournaments(data: TournamentUpdateManyMutationInput!, where: TournamentWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
+  deleteManyTournaments(where: TournamentWhereInput): BatchPayload!
   executeRaw(database: PrismaDatabase, query: String!): Json!
 }
 
@@ -64,8 +74,11 @@ enum PrismaDatabase {
 
 type Query {
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
+  tournaments(where: TournamentWhereInput, orderBy: TournamentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Tournament]!
   user(where: UserWhereUniqueInput!): User
+  tournament(where: TournamentWhereUniqueInput!): Tournament
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  tournamentsConnection(where: TournamentWhereInput, orderBy: TournamentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TournamentConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -76,12 +89,339 @@ type Query {
 
 type Subscription {
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  tournament(where: TournamentSubscriptionWhereInput): TournamentSubscriptionPayload
+}
+
+type Tournament implements Node {
+  id: ID!
+  name: String!
+  creator: User!
+}
+
+"""A connection to a list of items."""
+type TournamentConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [TournamentEdge]!
+  aggregate: AggregateTournament!
+}
+
+input TournamentCreateInput {
+  id: ID
+  name: String!
+  creator: UserCreateOneWithoutTournamentsInput!
+}
+
+input TournamentCreateManyWithoutCreatorInput {
+  create: [TournamentCreateWithoutCreatorInput!]
+  connect: [TournamentWhereUniqueInput!]
+}
+
+input TournamentCreateWithoutCreatorInput {
+  id: ID
+  name: String!
+}
+
+"""An edge in a connection."""
+type TournamentEdge {
+  """The item at the end of the edge."""
+  node: Tournament!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum TournamentOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+}
+
+type TournamentPreviousValues {
+  id: ID!
+  name: String!
+}
+
+input TournamentScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [TournamentScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [TournamentScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [TournamentScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+}
+
+type TournamentSubscriptionPayload {
+  mutation: MutationType!
+  node: Tournament
+  updatedFields: [String!]
+  previousValues: TournamentPreviousValues
+}
+
+input TournamentSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [TournamentSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [TournamentSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [TournamentSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: TournamentWhereInput
+}
+
+input TournamentUpdateInput {
+  name: String
+  creator: UserUpdateOneRequiredWithoutTournamentsInput
+}
+
+input TournamentUpdateManyDataInput {
+  name: String
+}
+
+input TournamentUpdateManyMutationInput {
+  name: String
+}
+
+input TournamentUpdateManyWithoutCreatorInput {
+  create: [TournamentCreateWithoutCreatorInput!]
+  connect: [TournamentWhereUniqueInput!]
+  set: [TournamentWhereUniqueInput!]
+  disconnect: [TournamentWhereUniqueInput!]
+  delete: [TournamentWhereUniqueInput!]
+  update: [TournamentUpdateWithWhereUniqueWithoutCreatorInput!]
+  updateMany: [TournamentUpdateManyWithWhereNestedInput!]
+  deleteMany: [TournamentScalarWhereInput!]
+  upsert: [TournamentUpsertWithWhereUniqueWithoutCreatorInput!]
+}
+
+input TournamentUpdateManyWithWhereNestedInput {
+  where: TournamentScalarWhereInput!
+  data: TournamentUpdateManyDataInput!
+}
+
+input TournamentUpdateWithoutCreatorDataInput {
+  name: String
+}
+
+input TournamentUpdateWithWhereUniqueWithoutCreatorInput {
+  where: TournamentWhereUniqueInput!
+  data: TournamentUpdateWithoutCreatorDataInput!
+}
+
+input TournamentUpsertWithWhereUniqueWithoutCreatorInput {
+  where: TournamentWhereUniqueInput!
+  update: TournamentUpdateWithoutCreatorDataInput!
+  create: TournamentCreateWithoutCreatorInput!
+}
+
+input TournamentWhereInput {
+  """Logical AND on all given filters."""
+  AND: [TournamentWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [TournamentWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [TournamentWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  creator: UserWhereInput
+}
+
+input TournamentWhereUniqueInput {
+  id: ID
+  name: String
 }
 
 type User implements Node {
   id: ID!
   name: String!
   email: String!
+  tournaments(where: TournamentWhereInput, orderBy: TournamentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Tournament!]
   password: String!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -98,6 +438,19 @@ type UserConnection {
 }
 
 input UserCreateInput {
+  id: ID
+  name: String!
+  email: String!
+  password: String!
+  tournaments: TournamentCreateManyWithoutCreatorInput
+}
+
+input UserCreateOneWithoutTournamentsInput {
+  create: UserCreateWithoutTournamentsInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateWithoutTournamentsInput {
   id: ID
   name: String!
   email: String!
@@ -180,12 +533,31 @@ input UserUpdateInput {
   name: String
   email: String
   password: String
+  tournaments: TournamentUpdateManyWithoutCreatorInput
 }
 
 input UserUpdateManyMutationInput {
   name: String
   email: String
   password: String
+}
+
+input UserUpdateOneRequiredWithoutTournamentsInput {
+  create: UserCreateWithoutTournamentsInput
+  connect: UserWhereUniqueInput
+  update: UserUpdateWithoutTournamentsDataInput
+  upsert: UserUpsertWithoutTournamentsInput
+}
+
+input UserUpdateWithoutTournamentsDataInput {
+  name: String
+  email: String
+  password: String
+}
+
+input UserUpsertWithoutTournamentsInput {
+  update: UserUpdateWithoutTournamentsDataInput!
+  create: UserCreateWithoutTournamentsInput!
 }
 
 input UserWhereInput {
@@ -401,6 +773,9 @@ input UserWhereInput {
 
   """All values greater than or equal the given value."""
   updatedAt_gte: DateTime
+  tournaments_every: TournamentWhereInput
+  tournaments_some: TournamentWhereInput
+  tournaments_none: TournamentWhereInput
 }
 
 input UserWhereUniqueInput {
