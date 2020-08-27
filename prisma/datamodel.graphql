@@ -6,10 +6,41 @@ type User {
   password: String!
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
+  role: Role! @default(value: USER)
 }
 
 type Tournament {
   id: ID! @id
   name: String! @unique
   creator: User! @relation(link: INLINE)
+  matches: [Match!]!
+  players: [Player!]!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type Match {
+  id: ID! @id
+  tournament: Tournament! @relation(link: INLINE)
+  players: [Player!]!
+  homeScore: Int! @default(value: 0)
+  awayScore: Int! @default(value: 0)
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type Player {
+  id: ID! @id
+  name: String! @unique
+  wins: Int! @default(value: 0)
+  losses: Int! @default(value: 0)
+  tournaments: [Tournament!]!
+  matches: [Match!]!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+enum Role {
+  ADMIN
+  USER
 }

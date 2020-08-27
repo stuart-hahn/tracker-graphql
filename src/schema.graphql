@@ -9,6 +9,7 @@ type Query {
     orderBy: UserOrderByInput
   ): [User!]!
   me: User!
+  tournaments: [Tournament!]!
 }
 
 type Mutation {
@@ -51,6 +52,37 @@ type User {
   password: String!
   updatedAt: String!
   createdAt: String!
+}
+
+type Tournament {
+  id: ID!
+  name: String!
+  creator: User!
+  matches: [Match!]!
+  players: [Player!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Match {
+  id: ID!
+  tournament: Tournament!
+  players: [Player!]!
+  homeScore: Int!
+  awayScore: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Player {
+  id: ID!
+  name: String!
+  wins: Int!
+  losses: Int!
+  tournaments: [Tournament!]!
+  matches: [Match!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 enum MutationType {
