@@ -3,39 +3,6 @@ type User {
   name: String!
   email: String! @unique
   password: String!
-  tournaments: [Tournament!]!
-    @relation(name: "TournamentToUser", onDelete: CASCADE)
-  createdAt: DateTime! @createdAt
-  updatedAt: DateTime! @updatedAt
-}
-
-type Tournament {
-  id: ID! @id
-  name: String! @unique
-  creator: User! @relation(name: "TournamentToUser", onDelete: SET_NULL)
-  matches: [Match!]! @relation(name: "MatchToTournament", onDelete: CASCADE)
-  createdAt: DateTime! @createdAt
-  updatedAt: DateTime! @updatedAt
-}
-
-type Match {
-  id: ID! @id
-  homeScore: Int! @default(value: 0)
-  awayScore: Int! @default(value: 0)
-  tournament: Tournament!
-    @relation(name: "MatchToTournament", onDelete: SET_NULL)
-  players: [Player!]! @relation(name: "PlayerToMatch", onDelete: SET_NULL)
-  createdAt: DateTime! @createdAt
-  updatedAt: DateTime! @updatedAt
-}
-
-type Player {
-  id: ID! @id
-  name: String! @unique
-  titles: Int! @default(value: 0)
-  matches: [Match!]! @relation(name: "PlayerToMatch", onDelete: SET_NULL)
-  wins: Int! @default(value: 0)
-  losses: Int! @default(value: 0)
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }
