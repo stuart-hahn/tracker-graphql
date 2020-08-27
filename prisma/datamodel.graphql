@@ -13,7 +13,7 @@ type Tournament {
   id: ID! @id
   name: String! @unique
   creator: User! @relation(link: INLINE)
-  matches: [Match!]!
+  matches: [Match!]! @relation(name: "MatchToTournament", onDelete: CASCADE)
   players: [Player!]!
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
@@ -21,7 +21,7 @@ type Tournament {
 
 type Match {
   id: ID! @id
-  tournament: Tournament! @relation(link: INLINE)
+  tournament: Tournament! @relation(link: INLINE, name: "MatchToTournament")
   players: [Player!]!
   homeScore: Int! @default(value: 0)
   awayScore: Int! @default(value: 0)

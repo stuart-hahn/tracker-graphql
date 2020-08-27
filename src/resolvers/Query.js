@@ -8,7 +8,7 @@ const Query = {
             after: args.after,
             orderBy: args.orderBy
         }
-        
+
         if (args.query) {
             opArgs.where = {
                 OR: [{
@@ -21,12 +21,23 @@ const Query = {
     },
     me(parent, args, { prisma, request }, info) {
         const userId = getUserId(request)
-        
+
         return prisma.query.user({
             where: {
                 id: userId
             }
         })
+    },
+    tournaments(parent, args, { prisma, request }, info) {
+        const opArgs = {}
+
+        if (args.query) {
+            opArgs.where = {
+                name_contains: args.query
+            }
+        }
+
+        return prisma.query.tournaments(opArgs, info)
     }
 }
 

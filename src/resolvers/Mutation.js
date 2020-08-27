@@ -62,6 +62,22 @@ const Mutation = {
             },
             data: args.data
         }, info)
+    },
+    async createTournament(parent, args, { prisma, request }, info) {
+        const userId = getUserId(request)
+
+        const tournament = await prisma.mutation.createTournament({
+            data: {
+                ...args.data,
+                creator: {
+                    connect: {
+                        id: userId
+                    }
+                }
+            }
+        }, info)
+
+        return tournament
     }
 }
 
