@@ -102,6 +102,22 @@ const Mutation = {
                 }
             }
         }, info)
+    },
+    async createPlayer(parent, args, { prisma, request }, info) {
+        const userId = getUserId(request)
+
+        const userIsAdmin = await prisma.exists.User({
+            id: userId,
+            role: 'ADMIN'
+        })
+
+        if (!userIsAdmin) {
+            throw new Error("Only admin can create new players")
+        }
+
+        return prisma.mutation.createPlayer({
+            data: args.data
+        }, info)
     }
 }
 

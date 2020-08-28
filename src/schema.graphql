@@ -21,6 +21,7 @@ type Mutation {
   updateUser(data: UpdateUserInput!): User!
   createTournament(data: CreateTournamentInput!): Tournament!
   createMatch(data: CreateMatchInput!): Match!
+  createPlayer(data: CreatePlayerInput!): Player!
 }
 
 # type Subscription {
@@ -57,6 +58,11 @@ input CreateMatchInput {
   tournament: ID!
 }
 
+input CreatePlayerInput {
+  name: String!
+  url: String
+}
+
 type User {
   id: ID!
   name: String!
@@ -91,6 +97,7 @@ type Player {
   name: String!
   wins: Int!
   losses: Int!
+  url: String
   tournaments: [Tournament!]!
   matches: [Match!]!
   createdAt: DateTime!

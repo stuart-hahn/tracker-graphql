@@ -32,6 +32,7 @@ type Match {
 type Player {
   id: ID! @id
   name: String! @unique
+  url: String
   wins: Int! @default(value: 0)
   losses: Int! @default(value: 0)
   tournaments: [Tournament!]!
